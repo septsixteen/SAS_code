@@ -1,0 +1,81 @@
+/*Chapter 5 with proc anova */
+*SAS code for Spock trail;
+PROC IMPORT OUT= WORK.spock 
+            DATAFILE= "F:\course doc\STAT1\5\case0502.csv" 
+            DBMS=CSV REPLACE;
+     GETNAMES=YES;
+     DATAROW=2; 
+RUN;
+
+
+proc anova data = spock;
+class judge;
+model percent = judge;
+run;
+
+data new;
+set spock;
+if judge = "Spock's" then newgroup = "spock";
+else newgroup = "atf";
+run;
+
+
+proc anova data  = new;
+class newgroup;
+model percent = newgroup;
+run;
+
+
+*SAS code for the education and income data;
+PROC IMPORT OUT= WORK.education 
+            DATAFILE= "F:\course doc\STAT1\5\ex0525.csv" 
+            DBMS=CSV REPLACE;
+     GETNAMES=YES;
+     DATAROW=2; 
+RUN;
+
+
+PROC NPAR1WAY data = education wilcoxon;
+class educ;
+var income2005;
+run;
+
+data logeduc;
+set education;
+lincome = log(income2005);
+run;
+
+proc anova data = logeduc;
+class educ;
+model lincome = educ;
+run;
+
+
+proc anova data = education;
+class educ;
+model income2005 = educ;
+run;
+
+proc sort data = education;
+by educ;
+run;
+proc univariate data = Education noprint;                                                                                                          
+by educ;                                                                                                                                
+histogram income2005;    
+qqplot income2005; 
+run;                                                                                                                                    
+
+
+data Filter;                                                                                                                            
+set education (where=(Educ = '12' or Educ = '<12'));                                                                                       
+run;                
+
+proc ttest data = filter;
+var income2005;
+class educ;
+run;
+
+proc univariate data = education;
+class educ;
+var income2005;
+run;
