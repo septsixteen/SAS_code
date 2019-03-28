@@ -1,0 +1,138 @@
+data hw33;
+input group $ meta;
+datalines;
+N	20.1
+N	22.9
+N	18.8
+N	20.9
+N	20.9
+N	22.7
+N	21.4
+N	20
+T	38.5
+T	25.8
+T	22
+T	23
+T	37.6
+T	30
+T	24.5
+;
+PROC NPAR1WAY DATA=HW33 WILCOXON;
+CLASS GROUP;
+VAR meta;
+EXACT WILCOXON;
+RUN;
+
+proc ttest data = hw33;
+var meta;
+class group;
+run;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+data cancer;
+input group $ time;
+datalines;
+c 2
+c 6
+c 8
+c 10
+c 12
+c 12
+c 14
+c 14
+c 14
+c 16
+c 16
+c 16
+c 18
+c 18
+c 18
+c 20
+c 22
+c 22
+c 26
+c 34
+c 36
+c 38
+c 40
+c 48
+t 2 
+t 2
+t 4
+t 4
+t 4
+t 6
+t 6
+t 8
+t 10
+t 10
+t 12
+t 14
+t 16
+t 16
+t 16
+t 18
+t 20
+t 22
+t 32
+t 36
+t 46
+t 46
+t 48
+t 48
+t 58
+t 58
+t 66
+t 72
+t 72
+t 82
+t 122
+t 122
+t 122
+t 122
+;
+proc ttest data = cancer side=u;
+class group;
+var time;
+run;
+
+PROC NPAR1WAY DATA=cancer WILCOXON;
+CLASS GROUP;
+VAR time;
+RUN;
+
+
+
+
+data soda;
+input ounce group;
+datalines;
+16.55 1
+15.36 1
+15.94 1
+16.43 1
+16.01 1
+16.05 2
+15.98 2
+16.1 2
+15.88 2
+15.91 2
+;
+
+proc glm data=soda;
+class group;
+model ounce = group;
+means group / hovtest;
+run;
