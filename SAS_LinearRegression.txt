@@ -1,0 +1,22 @@
+PROC IMPORT OUT= WORK.TCell
+            DATAFILE= "F:\TCell.csv" 
+            DBMS=CSV REPLACE;
+     GETNAMES=YES;
+     DATAROW=2; 
+RUN;
+
+
+proc print data = TCell; 
+run; 
+
+proc reg data = TCell;
+model tcell=mass;
+run;
+proc means data = TCell;
+var mass;
+run;
+proc sgplot data = TCell; 
+scatter x = mass y = tcell;
+run;
+
+
